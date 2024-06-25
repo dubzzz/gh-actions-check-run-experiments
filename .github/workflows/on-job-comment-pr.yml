@@ -1,15 +1,15 @@
 name: On job comment PR
 
 on:
-  check_run:
-    types: [created, rerequested, completed, requested_action]
-  check_suite:
-    types: [completed]
-  status:
-  watch:
-    types: [started]
-  workflow_call:
-  workflow_dispatch:
+  #  check_run:
+  #    types: [created, rerequested, completed, requested_action]
+  #  check_suite:
+  #    types: [completed]
+  #  status:
+  #  watch:
+  #    types: [started]
+  #  workflow_call:
+  #  workflow_dispatch:
   workflow_run:
     workflows: [PRs and Push]
     types: [completed, requested, in_progress]
@@ -21,6 +21,12 @@ permissions:
   contents: read
 
 jobs:
+  comment:
+    if: github.event.workflow_run.event == 'pull_request'
+    name: "Comment"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "PR is ${{ github.event.workflow_run.pull_requests[0].number }}"
   dump-context:
     name: "Dump context"
     runs-on: ubuntu-latest
