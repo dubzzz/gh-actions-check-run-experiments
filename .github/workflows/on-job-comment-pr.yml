@@ -5,11 +5,11 @@ on:
     types: [created, rerequested, completed, requested_action]
   check_suite:
     types: [completed]
-  status
+  status:
   watch:
     types: [started]
-  workflow_call
-  workflow_dispatch
+  workflow_call:
+  workflow_dispatch:
   workflow_run:
     types: [completed, requested, in_progress]
   pull_request:
