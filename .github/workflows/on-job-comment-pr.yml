@@ -17,6 +17,11 @@ on:
 #    branches:
 #      - main
 
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
 jobs:
   comment:
     if: github.event.workflow_run.event == 'pull_request'
