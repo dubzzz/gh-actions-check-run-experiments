@@ -11,6 +11,7 @@ on:
   workflow_call:
   workflow_dispatch:
   workflow_run:
+    workflows: [PRs and Push]
     types: [completed, requested, in_progress]
   pull_request:
     branches:
