@@ -27,6 +27,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "PR is ${{ github.event.workflow_run.pull_requests[0].number }}"
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: github.event.workflow_run.pull_requests[0].number
+          body: |
+            Workflow status is {{ github.event.action }}
   dump-context:
     name: "Dump context"
     runs-on: ubuntu-latest
