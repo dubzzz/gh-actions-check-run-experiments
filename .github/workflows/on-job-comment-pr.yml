@@ -12,7 +12,7 @@ on:
   #  workflow_dispatch:
   workflow_run:
     workflows: [PRs and Push]
-    types: [completed, requested, in_progress]
+    types: [completed, in_progress]
 #  pull_request:
 #    branches:
 #      - main
@@ -23,18 +23,37 @@ permissions:
   issues: write
 
 jobs:
-  comment:
-    if: github.event.workflow_run.event == 'pull_request'
-    name: "Comment"
+  comment_completed:
+    if: github.event.workflow_run.event == 'pull_request' && github.event.action == 'completed'
+    name: "Comment completed"
     runs-on: ubuntu-latest
     steps:
-      - run: echo "PR is ${{ github.event.workflow_run.pull_requests[0].number }}"
-      - name: Create comment
+      - name: Create success comment
+        if: github.event.workflow_run.conclusion == 'success'
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{github.event.workflow_run.pull_requests[0].number}}
           body: |
-            Workflow status is {{ github.event.action }}
+            :green_circle: test
+      - name: Create failure comment
+        if: github.event.workflow_run.conclusion != 'success'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{github.event.workflow_run.pull_requests[0].number}}
+          body: |
+            :red_circle: test
+  comment_running:
+    if: github.event.workflow_run.event == 'pull_request' && github.event.action == 'in_progress'
+    name: "Comment running"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create running comment
+        if: github.event.workflow_run.conclusion == 'success'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{github.event.workflow_run.pull_requests[0].number}}
+          body: |
+            :runner: test
   dump-context:
     name: "Dump context"
     runs-on: ubuntu-latest
